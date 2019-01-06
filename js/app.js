@@ -32,15 +32,6 @@ $(function () {
     console.log("cc");
     console.log(this.clientID);
 
-    navigator.mediaDevices.getUserMedia({
-      audio: false,
-      video: true,
-    }).then(stream => {
-      // Display your local video in #localVideo element
-      localVideo.srcObject = stream;
-      // Add your stream to be sent to the conneting peer
-      stream.getTracks().forEach(track => pc.addTrack(track, stream));
-    }, onError);
   });
 
   socket.on('chat_message', function(msg){
@@ -131,6 +122,17 @@ function startWebRTC(isOfferer){
         pc.createOffer().then(localDescCreated).catch(onError);
       }
     }
+
+
+    navigator.mediaDevices.getUserMedia({
+      audio: false,
+      video: true,
+    }).then(stream => {
+      // Display your local video in #localVideo element
+      localVideo.srcObject = stream;
+      // Add your stream to be sent to the conneting peer
+      stream.getTracks().forEach(track => pc.addTrack(track, stream));
+    }, onError);
   
     // When a remote stream arrives display it in the #remoteVideo element
     pc.ontrack = event => {
@@ -139,6 +141,7 @@ function startWebRTC(isOfferer){
         remoteVideo.srcObject = stream;
       }
     };
+    
 }
 
 
@@ -160,6 +163,7 @@ function sendMessage(message) {
 
 function onSuccess() {};
 function onError(error) {
-  console.log(error);
+  console.error(error);
+  // console.log(error);
 };
 
